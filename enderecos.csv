@@ -1,0 +1,82 @@
+id;cliente_id;tipo;cep;logradouro;numero;complemento;bairro;cidade;estado;created_at
+1;1;entrega;01001000;Rua Dom Pedro II;2933;;Vila Nova;São Paulo;SP;2025-09-01 12:56:26
+2;2;entrega;13010000;Rua XV de Novembro;2637;;Centro;Campinas;SP;2025-09-11 04:38:06
+3;3;entrega;86010000;Rua Dom Pedro II;1607;;Vila Nova;Londrina;PR;2025-08-29 01:25:31
+4;3;cobranca;89201000;Rua São José;113;;Industrial;Joinville;SC;2025-09-08 23:47:19
+5;4;entrega;80010-000;Rua XV de Novembro;512;;Centro;Curitiba;PR;2025-04-30 18:40:10
+6;5;entrega;88010000;Rua Marechal Deodoro;2372;;Industrial;Florianópolis;SC;2025-10-04 06:51:45
+7;6;entrega;88301000;Rua Dom Pedro II;1712;Apto 81;Centro;Itajaí;SC;2025-10-25 20:11:31
+8;6;cobranca;86010000;Travessa dos Andradas;1163;Apto 124;Centro;Londrina;PR;2024-12-21 09:00:19
+9;7;entrega;89010000;Avenida Brasil;2514;;Anita Garibaldi;Blumenau;SC;2025-08-07 14:09:48
+10;8;entrega;90010-000;Rua Dom Pedro II;154;;Anita Garibaldi;Porto Alegre;RS;2025-04-23 20:18:52
+11;9;entrega;30110000;Alameda dos Ipês;1714;Fundos;Jardim América;Belo Horizonte;MG;2025-02-11 12:28:44
+12;9;cobranca;88301000;Avenida Brasil;131;Fundos;Boa Vista;Itajaí;SC;2025-08-20 04:08:04
+13;10;entrega;89201000;Avenida Brasil;2209;;Industrial;Joinville;SC;2024-12-27 14:20:08
+14;11;entrega;01001000;Rua Marechal Deodoro;1862;;Glória;São Paulo;SP;2024-12-21 18:25:47
+15;12;entrega;13010-000;Rua São José;3027;Apto 99;Boa Vista;Campinas;SP;2025-07-21 19:07:15
+16;12;cobranca;30110-000;Alameda dos Ipês;680;Apto 48;Costa e Silva;Belo Horizonte;MG;2025-10-23 18:21:40
+17;13;entrega;86010000;Rua das Palmeiras;2005;;Industrial;Londrina;PR;2025-06-28 12:47:34
+18;14;entrega;80010000;Rua XV de Novembro;3187;;Industrial;Curitiba;PR;2025-06-25 19:29:06
+19;15;entrega;88010000;Rua Dom Pedro II;429;;Boa Vista;Florianópolis;SC;2025-06-02 18:53:43
+20;15;cobranca;13010000;Rua Marechal Deodoro;1681;;Costa e Silva;Campinas;SP;2024-03-12 00:20:55
+21;16;entrega;88301-000;Rua Dom Pedro II;2478;;Industrial;Itajaí;SC;2025-04-03 17:28:57
+22;17;entrega;89010000;Avenida Beira Mar;1395;;Glória;Blumenau;SC;2025-10-23 11:09:12
+23;18;entrega;90010000;Rua Dom Pedro II;1778;Apto 140;Anita Garibaldi;Porto Alegre;RS;2024-12-06 00:51:24
+24;18;cobranca;88010000;Rua XV de Novembro;1569;Apto 130;Glória;Florianópolis;SC;2025-07-09 20:48:39
+25;19;ENTREGA;30110000;Rua São José;2647;;Costa e Silva;Belo Horizonte;MG;2025-09-23 11:06:53
+26;20;entrega;89201-000;Avenida Getúlio Vargas;2455;;Centro;Joinville;SC;2025-06-03 14:11:23
+27;21;entrega;01001000;Rua Marechal Deodoro;2948;;Anita Garibaldi;São Paulo;SP;2025-10-11 23:18:43
+28;21;cobranca;90010000;Rua Marechal Deodoro;2044;;Vila Nova;Porto Alegre;RS;2025-06-24 13:19:25
+29;22;entrega;13010000;Rua Marechal Deodoro;2235;;São Cristóvão;Campinas;SP;2025-04-20 04:25:57
+30;23;entrega;86010000;Rua Dom Pedro II;3059;;São Cristóvão;Londrina;PR;2025-06-24 01:01:42
+31;24;entrega;80010-000;Travessa dos Andradas;1202;Apto 169;Anita Garibaldi;Curitiba;PR;2025-08-16 16:31:57
+32;24;cobranca;01001-000;Avenida Beira Mar;606;Apto 197;Boa Vista;São Paulo;SP;2025-02-28 17:45:33
+33;25;entrega;88010000;Alameda dos Ipês;3130;;Vila Nova;Florianópolis;SC;2025-10-01 16:36:12
+34;26;entrega;88301000;Avenida Beira Mar;2112;;Vila Nova;Itajaí;SC;2024-06-01 08:15:47
+35;27;entrega;89010000;Avenida Brasil;108;Fundos;Centro;Blumenau;SC;2025-07-09 17:50:55
+36;27;cobranca;80010000;Rua das Palmeiras;241;Fundos;Industrial;Curitiba;PR;2025-09-17 04:06:34
+37;28;entrega;90010-000;Rua das Palmeiras;284;;Glória;Porto Alegre;RS;2025-06-09 10:06:36
+38;29;entrega;30110000;Avenida Brasil;1816;;São Cristóvão;Belo Horizonte;MG;2025-10-19 02:45:15
+39;30;entrega;89201000;Avenida Beira Mar;2559;Apto 111;Bom Retiro;Joinville;SC;2024-12-17 09:25:16
+40;30;cobranca;89010000;Travessa dos Andradas;2635;Apto 19;Bom Retiro;Blumenau;SC;2025-07-20 18:37:47
+41;31;entrega;01001000;Rua Marechal Deodoro;1520;;Boa Vista;São Paulo;SP;2025-09-24 22:30:16
+42;32;entrega;13010-000;Rua XV de Novembro;3131;;São Cristóvão;Campinas;SP;2024-09-12 18:35:19
+43;33;entrega;86010000;Rua São José;1711;;Industrial;Londrina;PR;2025-04-26 05:22:38
+44;33;cobranca;89201000;Rua São José;2886;;São Cristóvão;Joinville;SC;2025-09-06 01:08:25
+45;34;entrega;80010000;Travessa dos Andradas;1453;;Glória;Curitiba;PR;2025-02-15 21:36:23
+46;35;entrega;88010000;Rua Dom Pedro II;1500;;Bom Retiro;Florianópolis;SC;2025-02-15 07:48:38
+47;36;entrega;88301-000;Rua Marechal Deodoro;904;Apto 49;Industrial;Itajaí;SC;2025-04-07 11:21:49
+48;36;cobranca;86010-000;Avenida Beira Mar;1992;Apto 64;Glória;Londrina;PR;2024-12-22 16:02:41
+49;37;entrega;89010000;Alameda dos Ipês;1609;;Bom Retiro;Blumenau;SC;2025-04-19 19:26:21
+50;38;ENTREGA;90010000;Rua Marechal Deodoro;2541;;Vila Nova;Porto Alegre;RS;2025-10-03 11:22:34
+51;39;entrega;30110000;Rua XV de Novembro;2217;;Vila Nova;Belo Horizonte;MG;2024-04-15 18:06:28
+52;39;cobranca;88301000;Rua São José;404;;Jardim América;Itajaí;SC;2025-06-04 12:59:49
+53;40;entrega;89201-000;Alameda dos Ipês;252;;Vila Nova;Joinville;SC;2024-08-30 09:32:56
+54;41;entrega;01001000;Travessa dos Andradas;1328;;Vila Nova;São Paulo;SP;2025-04-25 23:00:21
+55;42;entrega;13010000;Travessa dos Andradas;353;Apto 46;Costa e Silva;Campinas;SP;2025-07-22 13:20:28
+56;42;cobranca;30110000;Avenida Getúlio Vargas;3164;Apto 118;Vila Nova;Belo Horizonte;MG;2024-04-26 18:28:39
+57;43;entrega;86010000;Rua XV de Novembro;1994;;Boa Vista;Londrina;PR;2025-04-25 17:07:28
+58;44;entrega;80010-000;Avenida Brasil;1725;;Boa Vista;Curitiba;PR;2025-03-13 02:02:06
+59;45;entrega;88010000;Rua Dom Pedro II;231;Fundos;Jardim América;Florianópolis;SC;2025-08-25 23:53:07
+60;45;cobranca;13010000;Travessa dos Andradas;204;Fundos;Vila Nova;Campinas;SP;2025-10-21 06:55:56
+61;46;entrega;88301000;Avenida Brasil;791;;Vila Nova;Itajaí;SC;2025-10-11 09:06:42
+62;47;entrega;89010000;Avenida Getúlio Vargas;2064;;Boa Vista;Blumenau;SC;2025-09-21 02:21:51
+63;48;entrega;90010-000;Avenida Brasil;2195;Apto 87;Jardim América;Porto Alegre;RS;2025-08-12 21:44:48
+64;48;cobranca;88010-000;Avenida Beira Mar;568;Apto 176;Bom Retiro;Florianópolis;SC;2025-07-21 13:07:48
+65;49;entrega;30110000;Avenida Getúlio Vargas;1198;;Bom Retiro;Belo Horizonte;MG;2025-02-11 18:42:01
+66;50;entrega;89201000;Rua São José;2092;;Jardim América;Joinville;SC;2025-03-14 23:45:06
+67;51;entrega;01001000;Avenida Brasil;2373;;Vila Nova;São Paulo;SP;2025-02-09 00:09:07
+68;51;cobranca;90010000;Avenida Brasil;3163;;Bom Retiro;Porto Alegre;RS;2025-07-24 21:57:33
+69;52;entrega;13010-000;Rua das Palmeiras;733;;Jardim América;Campinas;SP;2025-04-13 11:27:37
+70;53;entrega;86010000;Alameda dos Ipês;964;;Anita Garibaldi;Londrina;PR;2024-11-01 00:47:42
+71;54;entrega;80010000;Travessa dos Andradas;1806;Apto 42;Industrial;Curitiba;PR;2025-09-15 14:29:59
+72;54;cobranca;01001000;Avenida Getúlio Vargas;1645;Apto 88;Costa e Silva;São Paulo;SP;2025-11-19 03:41:57
+73;55;entrega;88010000;Avenida Getúlio Vargas;868;;Boa Vista;Florianópolis;SC;2024-09-12 16:23:03
+74;56;entrega;88301-000;Alameda dos Ipês;2422;;Anita Garibaldi;Itajaí;SC;2025-01-26 05:48:45
+75;57;ENTREGA;89010000;Avenida Getúlio Vargas;2073;;São Cristóvão;Blumenau;SC;2025-03-24 18:12:21
+76;57;COBRANCA;80010000;Avenida Brasil;309;;Boa Vista;Curitiba;PR;2025-07-17 12:03:37
+77;58;entrega;90010000;Rua XV de Novembro;1394;;São Cristóvão;Porto Alegre;RS;2025-11-06 09:22:35
+78;59;entrega;30110000;Rua das Palmeiras;1840;;Industrial;Belo Horizonte;MG;2025-08-08 08:19:47
+79;60;entrega;89201-000;Alameda dos Ipês;1521;Apto 125;São Cristóvão;Joinville;SC;2025-05-27 22:13:50
+80;60;cobranca;89010-000;Rua Marechal Deodoro;2997;Apto 101;Centro;Blumenau;SC;2025-06-03 22:08:43
+81;999;entrega;89201000;Rua Antiga Removida;45;;Centro;Joinville;SC;2024-03-11 10:22:00

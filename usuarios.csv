@@ -1,0 +1,9 @@
+id;nome;email;senha;tipo;ativo;created_at;updated_at
+1;Rodrigo Salles;rodrigo.salles@lojavirtual.com.br;3e7bf1383bcdd338f3d837f3dc948f80;admin;1;2024-01-22 06:16:28;2024-10-24 21:10:03
+2;Camila Ferraz;camila.ferraz@lojavirtual.com.br;217686d431c00c5697ae2ab9e31d2f03;admin;1;2024-02-12 09:59:25;2024-04-04 13:43:07
+3;Bruno Antunes;bruno.antunes@lojavirtual.com.br;fe6c9479a0115f30240ed79bfb361c76;operador;1;2024-02-27 20:55:40;2024-08-11 17:58:24
+4;Elaine Souto;elaine.souto@lojavirtual.com.br;740e9aa96df1dea998efcc528508d133;operador;1;2024-02-13 00:34:35;2024-08-10 09:48:57
+5;Marcos Vinicius Reis;marcos.reis@lojavirtual.com.br;3945e21cbc81f9e9c2faea2a11090b3f;OPERADOR;1;2024-02-04 06:09:06;2024-06-12 16:35:20
+6;Tatiane Muller;tatiane.muller@lojavirtual.com.br;d2cb6badf10e62a3d184986179e91c61;estoque;1;2024-01-08 09:25:29;2025-02-25 04:38:15
+7;Fabio Lacerda;fabio.lacerda@lojavirtual.com.br;a69a446d5280bc981f505ddd1f16d184;estoque;1;2024-03-20 17:21:49;2025-03-26 09:59:42
+8;Suporte Sistema;suporte@lojavirtual.com.br;01f9ab3d163fb6fde0d8a7317849950e;operador;0;2024-01-17 11:22:30;2025-08-28 13:55:16
