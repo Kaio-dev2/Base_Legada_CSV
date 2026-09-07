@@ -117,6 +117,7 @@ public class Main{
                         }        
                 stmt.setObject(8, dataCriacaoConvertida);
                 stmt.setObject(9, dataAtualizacaoConvertida);
+                stmt.executeUpdate();
             }
             
         }
