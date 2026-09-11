@@ -1,21 +1,19 @@
-# Migração de Clientes — Java + JDBC
+# Migração de Base Legada — Java + JDBC
 
-Projeto de estudo para desenvolver uma rotina de **migração de dados de uma base legada em CSV para MySQL**, utilizando Java e JDBC.
+Projeto de estudo para desenvolver uma rotina de migração de dados de uma base legada em CSV para MySQL, utilizando Java e JDBC.
 
-O projeto tem como foco principal **entender o processo por baixo das abstrações**, praticando leitura de arquivos, validação, transformação de dados, acesso a banco e persistência.
+O foco principal é compreender o processo por baixo das abstrações, praticando leitura de arquivos, parsing, validação, transformação de dados, acesso ao banco e persistência.
 
----
-
-## 🎯 Objetivo
+## Objetivo
 
 Construir uma rotina capaz de:
 
-* Ler registros de uma base CSV legada;
-* Validar os dados recebidos;
-* Transformar os dados para os tipos adequados;
-* Persistir os registros no MySQL;
-* Tratar registros inválidos e erros;
-* Trabalhar com transações e segurança na persistência.
+- Ler registros de uma base CSV legada
+- Validar os dados recebidos
+- Transformar os dados para os tipos adequados
+- Persistir os registros no MySQL
+- Tratar registros inválidos e erros
+- Trabalhar posteriormente com transações e segurança na persistência
 
 ### Principal objetivo de aprendizado
 
@@ -23,194 +21,323 @@ Mais do que simplesmente fazer a migração funcionar, o objetivo é compreender
 
 **Arquivo → Parsing → Validação → Transformação → JDBC → Banco de dados**
 
-Posteriormente, o projeto será refatorado para uma estrutura mais organizada, aplicando conceitos de POO e boas práticas.
-
----
+A implementação começa de forma simples para permitir a compreensão de cada etapa. Posteriormente, o projeto será refatorado aplicando conceitos de POO, separação de responsabilidades, testes e boas práticas.
 
 ## Tecnologias
 
-* Java 21
-* JDBC
-* MySQL
-* Maven
-* Git / GitHub
+- Java 21
+- JDBC
+- MySQL
+- Maven
+- Git / GitHub
 
----
+## Estrutura atual
 
-## Estrutura
-
-```text
-projeto/
-├── src/
-│   └── Main.java
+```
+Base_Legada_CSV/
 ├── base_legada/
-│   └── clientes.csv
+│   ├── usuarios.csv
+│   ├── clientes.csv
+│   ├── enderecos.csv
+│   ├── categorias.csv
+│   ├── produtos.csv
+│   ├── produto_imagens.csv
+│   ├── estoques.csv
+│   ├── carrinhos.csv
+│   ├── pedidos.csv
+│   └── pedido_itens.csv
+│
+├── src/
+│   └── main/
+│       └── java/
+│           └── br/
+│               └── com/
+│                   └── loja/
+│                       ├── Main.java
+│                       ├── conexao/
+│                       ├── migracao/
+│                       └── util/
+│
 ├── pom.xml
 └── README.md
 ```
 
----
+A estrutura separa a aplicação principal, conexão com o banco, rotinas de migração e futuras classes utilitárias.
 
 ## Dados da base legada
 
-A tabela `clientes` possui os seguintes campos:
+A base legada é composta por diferentes arquivos CSV relacionados ao funcionamento de uma loja virtual:
 
-| Campo      | Tipo conceitual |
-| ---------- | --------------- |
-| id         | Inteiro         |
-| nome       | Texto           |
-| email      | Texto           |
-| cpf        | Texto           |
-| telefone   | Texto           |
-| senha      | Texto           |
-| ativo      | Booleano        |
-| created_at | Data/hora       |
-| updated_at | Data/hora       |
+- usuarios.csv
+- clientes.csv
+- enderecos.csv
+- categorias.csv
+- produtos.csv
+- produto_imagens.csv
+- estoques.csv
+- carrinhos.csv
+- pedidos.csv
+- pedido_itens.csv
 
-O CSV possui **9 campos separados por `;`**.
+Os arquivos utilizam `;` como separador e possuem uma linha de cabeçalho.
 
----
+A análise da base é feita progressivamente, identificando:
+
+- Estrutura dos registros
+- Tipos de dados
+- Campos obrigatórios e opcionais
+- Formatos inconsistentes
+- Registros duplicados
+- Dependências entre tabelas
+- Problemas a tratar durante a migração
 
 ## Processo de migração
 
 ### 1. Leitura
 
-Utilização de `Path`, `BufferedReader` e `readLine()` para percorrer o arquivo linha por linha.
+Utilização de `Path`, `Files`, `BufferedReader` e `readLine()` para acessar o arquivo e percorrê-lo linha por linha. O cabeçalho é lido separadamente antes do processamento dos registros.
 
 ### 2. Parsing
 
-Cada linha é dividida em campos e armazenada em um `String[]`.
+Cada linha do CSV é separada em campos e armazenada em um `String[]`.
 
-Nesse estágio foi praticado:
+Práticas envolvidas:
 
-* Arrays;
-* Índices;
-* `length`;
-* `String`;
-* `split()`.
+- Arrays
+- Índices
+- `length`
+- `String`
+- `split()`
+- Percorrimento de registros
+
+A leitura considera `;` como separador.
 
 ### 3. Validação
 
-Os registros são verificados antes de continuar o processamento.
+Antes da persistência, os registros passam por validações básicas. No fluxo de `clientes.csv`, são verificados:
 
-Atualmente são validados:
+- Quantidade correta de campos
+- Campos obrigatórios
+- Integridade necessária para as conversões
+- Erros encontrados durante o processamento
 
-* Quantidade de campos;
-* Nome;
-* Email;
-* Senha.
+Quando um registro apresenta problema, ele é rejeitado sem interromper a migração dos demais.
 
 ### 4. Transformação
 
-Os valores recebidos do CSV começam como `String` e precisam ser convertidos ou normalizados conforme o tipo esperado pelo banco.
+Os valores do CSV são inicialmente tratados como `String` e depois convertidos para os tipos esperados pela aplicação e pelo banco.
 
-Exemplo já praticado:
+Transformações já implementadas:
 
-`String → int` utilizando `Integer.parseInt()`.
+- `String` → `int`
+- `String` → `boolean`
+- `String` → `LocalDate`
+- `String` → `LocalDateTime`
 
-Próximas transformações:
+O campo `ativo` pode ter diferentes representações na base legada, como `1`, `0`, `S`, `N`, que são convertidas para um valor booleano antes da persistência.
 
-* `ativo`;
-* CPF;
-* telefone;
-* datas.
+As datas também são convertidas para `LocalDateTime`, tratando diferentes formatos encontrados na análise da base.
 
 ### 5. Persistência
 
-A próxima etapa será utilizar JDBC para:
+Realizada via JDBC:
 
-* Abrir uma conexão;
-* Criar um `PreparedStatement`;
-* Definir os parâmetros;
-* Executar o `INSERT`;
-* Trabalhar com transações.
+- Abrir conexão com o MySQL
+- Criar um `PreparedStatement`
+- Definir os parâmetros
+- Executar o `INSERT`
+- Tratar possíveis erros
+- Continuar o processamento dos próximos registros
+- Conferir os dados persistidos no banco
 
----
+O `PreparedStatement` permite trabalhar com parâmetros separados da instrução SQL, evitando a construção direta dos valores na query.
+
+## Primeira migração — Clientes
+
+Migração completa realizada com `clientes.csv → tabela clientes`. O arquivo possui 60 registros.
+
+Resultado da execução:
+
+```
+Total lidas: 60
+Inseridas: 59
+Rejeitadas: 1
+```
+
+### Registro problemático
+
+Foi identificado um registro com email duplicado. O registro de ID 41 foi rejeitado devido à restrição de unicidade do campo `email` na tabela `clientes`.
+
+O banco retornou:
+
+```
+Duplicate entry 'juliana.prado@email.com'
+```
+
+O erro não interrompeu a migração — os registros seguintes continuaram sendo processados normalmente até o ID 60, demonstrando o tratamento de erros por registro implementado na rotina.
+
+## Fluxo atual
+
+```
+clientes.csv
+     ↓
+Leitura do arquivo
+     ↓
+Parsing da linha
+     ↓
+Validação
+     ↓
+Conversão dos dados
+     ↓
+PreparedStatement
+     ↓
+INSERT no MySQL
+     ↓
+Sucesso ou rejeição do registro
+     ↓
+Próximo registro
+```
+
+Resumo ao final da execução:
+
+```
+===== RESUMO DA MIGRAÇÃO =====
+Total lidas: 60
+Inseridas: 59
+Rejeitadas: 1
+```
 
 ## Conceitos estudados
 
-* Manipulação de arquivos;
-* `Path`;
-* `BufferedReader`;
-* Arrays;
-* Strings;
-* Loops;
-* Validação;
-* Parsing e conversão de tipos;
-* Exceções verificadas (`IOException`);
-* JDBC;
-* SQL;
-* Preparação para POO.
+**Manipulação de arquivos**
+- `Path`, `Files`, `BufferedReader`, `readLine()`
 
----
+**Estruturas da linguagem**
+- Arrays, `String`, índices, `length`, loops, condicionais, métodos
+
+**Validação e tratamento**
+- Validação de quantidade de campos e campos obrigatórios
+- `try/catch`, `SQLException`, `RuntimeException`
+- Tratamento de erro por registro
+
+**Conversão de dados**
+- `Integer.parseInt()`, conversão para `boolean`
+- `LocalDate`, `LocalDateTime`, `DateTimeFormatter`, `DateTimeParseException`
+
+**JDBC**
+- `Connection`, `DriverManager`, `PreparedStatement`
+- `setInt()`, `setString()`, `setBoolean()`, `setObject()`, `executeUpdate()`
+
+**Banco de dados**
+- SQL, `INSERT`, chaves primárias, restrições de unicidade
+- Persistência e validação dos registros após a migração
 
 ## Progresso
 
-### Leitura
+**Leitura**
+- [x] Localizar arquivo
+- [x] Abrir arquivo
+- [x] Ler linha por linha
+- [x] Ignorar cabeçalho
 
-* [x] Localizar arquivo
-* [x] Abrir arquivo
-* [x] Ler linha por linha
+**Parsing**
+- [x] Separar campos
+- [x] Trabalhar com arrays
+- [x] Entender índices
+- [x] Utilizar `length`
+- [x] Utilizar `split()`
 
-### Parsing
+**Validação**
+- [x] Validar quantidade de campos
+- [x] Validar campos obrigatórios
+- [x] Tratar registros inválidos sem interromper a migração
 
-* [x] Separar campos
-* [x] Trabalhar com arrays
-* [x] Entender índices
-* [x] Utilizar `length`
+**Transformação**
+- [x] Converter ID
+- [x] Transformar `ativo`
+- [x] Converter datas
+- [ ] Normalizar CPF
+- [ ] Normalizar telefone
+- [ ] Melhorar tratamento de valores opcionais
 
-### Validação
+**Banco de dados**
+- [x] Conectar ao MySQL
+- [x] Criar `PreparedStatement`
+- [x] Definir parâmetros
+- [x] Inserir registros
+- [x] Conferir registros migrados
+- [x] Tratar erros por registro
+- [ ] Trabalhar com transações
+- [ ] Gerar relatório formal da migração
 
-* [x] Validar quantidade de campos
-* [x] Validar campos obrigatórios
+**Migração dos arquivos**
+- [x] clientes.csv
+- [ ] usuarios.csv
+- [ ] enderecos.csv
+- [ ] categorias.csv
+- [ ] produtos.csv
+- [ ] produto_imagens.csv
+- [ ] estoques.csv
+- [ ] carrinhos.csv
+- [ ] pedidos.csv
+- [ ] pedido_itens.csv
 
-### Transformação
+**Análise da base legada**
+- [ ] Identificar inconsistências nos dados analisados
+- [ ] Identificar campos vazios
+- [ ] Identificar formatos de dados inconsistentes
+- [ ] Identificar registro duplicado
+- [ ] Documentar todos os problemas encontrados
+- [ ] Definir tratamento para todos os registros problemáticos
 
-* [x] Converter `id`
-* [ ] Transformar `ativo`
-* [ ] Normalizar CPF
-* [ ] Normalizar telefone
-* [ ] Normalizar datas
+**Refatoração**
+- [ ] Aplicar POO
+- [ ] Separar responsabilidades
+- [ ] Criar classes específicas para cada etapa
+- [ ] Criar métodos reutilizáveis
+- [ ] Adicionar testes
+- [ ] Melhorar arquitetura
 
-### Banco de dados
+## Estado atual
 
-* [x] Conectar ao MySQL
-* [ ] Criar `PreparedStatement`
-* [ ] Inserir registros
-* [ ] Trabalhar com transações
-* [ ] Tratamento de erros
+A primeira migração foi concluída com sucesso utilizando `clientes.csv`.
 
-### Refatoração
+Fluxo atual em funcionamento:
 
-* [ ] Aplicar POO
-* [ ] Separar responsabilidades
-* [ ] Criar classes
-* [ ] Criar métodos
-* [ ] Adicionar testes
-* [ ] Melhorar arquitetura
+```
+CSV → Leitura → Parsing → Validação → Transformação → PreparedStatement → MySQL
+```
 
----
+Resultado da primeira execução completa:
 
-## 📍 Estado atual
+- 60 registros lidos
+- 59 registros inseridos
+- 1 registro rejeitado (email duplicado, tratado sem interromper o processamento)
 
-A etapa de **leitura, parsing e validação básica** já está funcionando.
+A estrutura inicial do projeto já foi organizada em pacotes, preparando o código para a evolução posterior.
 
-Também foi realizada a primeira conversão de dados:
+## Próximos passos
 
-`String → int`
+Após a conclusão de `clientes.csv`, o projeto seguirá para os demais arquivos da base. A ordem será definida considerando as dependências entre as tabelas, principalmente as relacionadas por chaves estrangeiras.
 
-O próximo passo é continuar a etapa de **transformação dos dados**, começando pelo campo `ativo`.
+Para cada arquivo será seguido o mesmo processo:
 
----
+```
+Analisar → Ler → Validar → Transformar → Persistir → Testar → Documentar
+```
+
+Depois que os fluxos individuais estiverem funcionando, será realizada uma refatoração geral para reduzir duplicação e melhorar a organização do projeto.
 
 ## Filosofia do projeto
 
-Este projeto está sendo desenvolvido com foco em **aprendizado e compreensão**, evitando abstrações prematuras.
+Este projeto está sendo desenvolvido com foco em aprendizado e compreensão, evitando abstrações prematuras. A implementação começa de forma simples para entender o funcionamento de cada etapa antes de introduzir abstrações maiores.
 
-A implementação será construída primeiro de forma simples para entender o funcionamento de cada etapa.
+O objetivo é entender não apenas o que fazer, mas por que cada decisão foi tomada.
 
-Depois que o fluxo estiver funcionando, o código será evoluído para uma estrutura mais profissional utilizando:
+Evolução planejada:
 
-**POO → separação de responsabilidades → boas práticas → testes → arquitetura.**
+```
+Java básico → JDBC → POO → separação de responsabilidades → reutilização → testes → arquitetura
+```
 
-O objetivo final não é apenas possuir um sistema de migração funcional, mas compreender **como e por que cada parte funciona**.
+O objetivo final não é apenas ter uma rotina de migração funcional, mas compreender profundamente o processo de migração de uma base legada e as decisões envolvidas em sua implementação.
