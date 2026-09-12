@@ -1,11 +1,13 @@
 package br.com.loja;
 
-import br.com.loja.conexao.Conexao;
-import br.com.loja.migracao.ClientesMigracao;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import br.com.loja.conexao.Conexao;
+import br.com.loja.migracao.ClientesMigracao;
+import br.com.loja.migracao.UsuariosMigracao;
+
 
 public class Main {
 
@@ -15,8 +17,15 @@ public class Main {
 
         System.out.println("Conectado!");
 
-        ClientesMigracao migracao = new ClientesMigracao();
+        ClientesMigracao migracao1 = new ClientesMigracao();
+        UsuariosMigracao migracao2 = new UsuariosMigracao();
 
-        migracao.migrar(conexao);
+
+        System.out.println("=== MIGRANDO CLIENTES ===");
+        migracao1.migrar(conexao);
+
+        System.out.println();
+        System.out.println("=== MIGRANDO USUARIOS ===");
+        migracao2.migrar(conexao);
     }
-}
+    }
