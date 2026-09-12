@@ -134,9 +134,9 @@ Transformações já implementadas:
 - `String` → `LocalDate`
 - `String` → `LocalDateTime`
 
-O campo `ativo` pode ter diferentes representações na base legada, como `1`, `0`, `S`, `N`, que são convertidas para um valor booleano antes da persistência.
+As representações do campo `ativo` encontradas na base legada são convertidas para `boolean` antes da persistência.
 
-As datas também são convertidas para `LocalDateTime`, tratando diferentes formatos encontrados na análise da base.
+As datas também são convertidas para `LocalDateTime`, tratando diferentes formatos encontrados durante a análise dos arquivos.
 
 ### 5. Persistência
 
@@ -176,10 +176,68 @@ Duplicate entry 'juliana.prado@email.com'
 
 O erro não interrompeu a migração — os registros seguintes continuaram sendo processados normalmente até o ID 60, demonstrando o tratamento de erros por registro implementado na rotina.
 
+## Migração de Usuários
+
+Migração realizada com `usuarios.csv → tabela usuarios`. O arquivo possui 8 registros.
+
+Durante a análise foi identificada uma inconsistência de capitalização no campo `tipo`, com valores como `operador` e `OPERADOR`.
+
+A migração realizou:
+
+- Validação da quantidade de campos
+- Validação de campos obrigatórios
+- Conversão do campo `ativo` para `boolean`
+- Conversão das datas para `LocalDateTime`
+- Persistência utilizando `PreparedStatement`
+
+Resultado da execução:
+
+```
+Total lidas: 8
+Inseridas: 8
+Rejeitadas: 0
+```
+
+A diferença de capitalização do campo `tipo` foi mantida nesta etapa, pois a migração tem como objetivo preservar os dados legados enquanto as transformações necessárias são aplicadas.
+
+## Migração de Endereços
+
+Migração realizada com `enderecos.csv → tabela enderecos`. O arquivo possui 81 registros.
+
+A migração realizou:
+
+- Validação da quantidade de campos
+- Validação de campos obrigatórios
+- Conversão de `cliente_id` para `int`
+- Conversão de `created_at` para `LocalDateTime`
+- Validação da integridade referencial com a tabela `clientes`
+- Persistência utilizando `PreparedStatement`
+- Tratamento individual dos erros, permitindo continuar a migração após uma rejeição
+
+Resultado da execução:
+
+```
+Total lidas: 81
+Inseridas: 79
+Rejeitadas: 2
+```
+
+### Registros problemáticos
+
+**ID 54**
+
+O registro possui `cliente_id = 41`. O cliente 41 não foi inserido na nova base devido ao problema de email duplicado identificado durante a migração de `clientes`. Como consequência, o endereço 54 não pôde ser inserido devido à restrição de chave estrangeira entre `enderecos.cliente_id` e `clientes.id`.
+
+**ID 81**
+
+O registro possui `cliente_id = 999`. Não existe um cliente com esse ID na tabela `clientes`, causando uma violação da chave estrangeira durante a tentativa de inserção.
+
+Os dois registros foram rejeitados sem interromper o processamento dos demais registros.
+
 ## Fluxo atual
 
 ```
-clientes.csv
+CSV
      ↓
 Leitura do arquivo
      ↓
@@ -222,7 +280,7 @@ Rejeitadas: 1
 
 **Conversão de dados**
 - `Integer.parseInt()`, conversão para `boolean`
-- `LocalDate`, `LocalDateTime`, `DateTimeFormatter`, `DateTimeParseException`
+- Conversão e tratamento de datas com `LocalDate` e `LocalDateTime`, `DateTimeFormatter`, `DateTimeParseException`
 
 **JDBC**
 - `Connection`, `DriverManager`, `PreparedStatement`
@@ -272,8 +330,8 @@ Rejeitadas: 1
 
 **Migração dos arquivos**
 - [x] clientes.csv
-- [ ] usuarios.csv
-- [ ] enderecos.csv
+- [x] usuarios.csv
+- [x] enderecos.csv
 - [ ] categorias.csv
 - [ ] produtos.csv
 - [ ] produto_imagens.csv
@@ -283,12 +341,13 @@ Rejeitadas: 1
 - [ ] pedido_itens.csv
 
 **Análise da base legada**
-- [ ] Identificar inconsistências nos dados analisados
-- [ ] Identificar campos vazios
-- [ ] Identificar formatos de dados inconsistentes
-- [ ] Identificar registro duplicado
-- [ ] Documentar todos os problemas encontrados
-- [ ] Definir tratamento para todos os registros problemáticos
+- [x] Identificar inconsistências nos dados analisados
+- [x] Identificar campos vazios
+- [x] Identificar formatos de dados inconsistentes
+- [x] Identificar registros duplicados
+- [x] Identificar problemas de integridade referencial
+- [x] Documentar os problemas encontrados nas tabelas analisadas
+- [x] Definir tratamento para os registros problemáticos
 
 **Refatoração**
 - [ ] Aplicar POO
@@ -300,25 +359,27 @@ Rejeitadas: 1
 
 ## Estado atual
 
-A primeira migração foi concluída com sucesso utilizando `clientes.csv`.
+Três arquivos da base legada já foram migrados com sucesso:
 
-Fluxo atual em funcionamento:
+- `clientes.csv`: 60 lidos, 59 inseridos e 1 rejeitado
+- `usuarios.csv`: 8 lidos, 8 inseridos e 0 rejeitados
+- `enderecos.csv`: 81 lidos, 79 inseridos e 2 rejeitados
+
+Os registros rejeitados são tratados individualmente, permitindo que os demais registros continuem sendo processados.
+
+Também foram identificadas dependências entre os dados. Um dos endereços rejeitados depende de um cliente que já havia sido rejeitado em uma etapa anterior, enquanto outro referencia um cliente inexistente na base.
+
+O fluxo atual permanece:
 
 ```
 CSV → Leitura → Parsing → Validação → Transformação → PreparedStatement → MySQL
 ```
 
-Resultado da primeira execução completa:
-
-- 60 registros lidos
-- 59 registros inseridos
-- 1 registro rejeitado (email duplicado, tratado sem interromper o processamento)
-
-A estrutura inicial do projeto já foi organizada em pacotes, preparando o código para a evolução posterior.
+A estrutura do projeto já está organizada em pacotes, permitindo continuar a implementação dos demais arquivos antes da etapa de refatoração.
 
 ## Próximos passos
 
-Após a conclusão de `clientes.csv`, o projeto seguirá para os demais arquivos da base. A ordem será definida considerando as dependências entre as tabelas, principalmente as relacionadas por chaves estrangeiras.
+Após a conclusão das primeiras migrações, o projeto seguirá para os demais arquivos da base. A ordem será definida considerando as dependências entre as tabelas, principalmente as relacionadas por chaves estrangeiras.
 
 Para cada arquivo será seguido o mesmo processo:
 
