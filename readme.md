@@ -56,6 +56,10 @@ Base_Legada_CSV/
 │                       ├── Main.java
 │                       ├── conexao/
 │                       ├── migracao/
+│                       │   ├── ClientesMigracao.java
+│                       │   ├── UsuariosMigracao.java
+│                       │   ├── EnderecosMigracao.java
+│                       │   └── CategoriasMigracao.java
 │                       └── util/
 │
 ├── pom.xml
