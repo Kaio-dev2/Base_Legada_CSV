@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import br.com.loja.conexao.Conexao;
-import br.com.loja.migracao.EnderecosMigracao;
+import br.com.loja.migracao.CategoriasMigracao;
 
 
 public class Main {
@@ -16,9 +16,9 @@ public class Main {
 
         System.out.println("Conectado!");
 
-        EnderecosMigracao migracao3 = new EnderecosMigracao();
+        CategoriasMigracao migracao3 = new CategoriasMigracao();
 
-        System.out.println("=== MIGRANDO ENDERECOS ===");
+        System.out.println("=== MIGRANDO CATEGORIAS ===");
         migracao3.migrar(conexao);
     }
     }
