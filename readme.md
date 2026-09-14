@@ -234,6 +234,42 @@ O registro possui `cliente_id = 999`. Não existe um cliente com esse ID na tabe
 
 Os dois registros foram rejeitados sem interromper o processamento dos demais registros.
 
+## Migração de Categorias
+
+Migração realizada com `categorias.csv → tabela categorias`. O arquivo possui 19 registros.
+
+A migração realizou:
+
+- Validação da quantidade de campos
+- Validação de campos obrigatórios
+- Conversão do ID para `int`
+- Conversão de `categoria_pai_id`
+- Tratamento de categorias sem categoria pai utilizando `NULL`
+- Conversão do campo `ativo` para `boolean`
+- Conversão das datas para `LocalDateTime`
+- Validação da integridade referencial da categoria pai
+- Persistência utilizando `PreparedStatement`
+- Tratamento individual dos erros
+
+Resultado da execução:
+
+```text
+Total lidas: 19
+Inseridas: 18
+Rejeitadas: 1
+
+Registro problemático
+
+ID 19
+
+O registro possui categoria_pai_id = 99, porém a categoria 99 não existe na tabela categorias.
+
+O registro foi rejeitado pela chave estrangeira responsável pela relação entre categoria_pai_id e categorias.id.
+
+As categorias de ID 1 até 6 foram identificadas como categorias principais, enquanto as categorias de ID 7 até 18 possuem referências válidas para suas respectivas categorias pai.
+
+A rejeição demonstra a importância da integridade referencial durante a migração, impedindo que uma categoria seja inserida apontando para uma categoria inexistente.
+
 ## Fluxo atual
 
 ```
@@ -332,7 +368,7 @@ Rejeitadas: 1
 - [x] clientes.csv
 - [x] usuarios.csv
 - [x] enderecos.csv
-- [ ] categorias.csv
+- [x] categorias.csv
 - [ ] produtos.csv
 - [ ] produto_imagens.csv
 - [ ] estoques.csv
@@ -359,11 +395,13 @@ Rejeitadas: 1
 
 ## Estado atual
 
-Três arquivos da base legada já foram migrados com sucesso:
+Quatro arquivos da base legada já foram migrados:
+
 
 - `clientes.csv`: 60 lidos, 59 inseridos e 1 rejeitado
 - `usuarios.csv`: 8 lidos, 8 inseridos e 0 rejeitados
 - `enderecos.csv`: 81 lidos, 79 inseridos e 2 rejeitados
+- `categorias.csv`: 19 lidos, 18 inseridos e 1 rejeitado
 
 Os registros rejeitados são tratados individualmente, permitindo que os demais registros continuem sendo processados.
 
