@@ -13,7 +13,7 @@
             import java.time.format.DateTimeFormatter;
             import java.time.format.DateTimeParseException;
 
-            public class Produtos {
+            public class ProdutosMigracao {
                 
                 private LocalDateTime converterData(String data) {
 
