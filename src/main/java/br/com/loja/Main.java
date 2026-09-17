@@ -18,7 +18,7 @@ public class Main {
 
         PedidosMigracao migracao3 = new PedidosMigracao();
 
-        System.out.println("=== MIGRANDO PRODUTOS IMAGENS ===");
+        System.out.println("=== MIGRANDO PEDIDOS ===");
         migracao3.migrar(conexao);
     }
     }
