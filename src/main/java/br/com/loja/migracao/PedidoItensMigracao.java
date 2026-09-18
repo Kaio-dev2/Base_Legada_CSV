@@ -1,5 +1,132 @@
 package br.com.loja.migracao;
 
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+
 public class PedidoItensMigracao {
     
+
+    private LocalDateTime converterData(String data) {
+
+        DateTimeFormatter[] formatos = {
+                DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"),
+                DateTimeFormatter.ofPattern("dd/MM/uuuu HH:mm:ss")
+        };
+
+        for (DateTimeFormatter formato : formatos) {
+            try {
+                return LocalDateTime.parse(data, formato);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+
+        try {
+            return LocalDate.parse(
+                    data,
+                    DateTimeFormatter.ofPattern("dd/MM/uuuu")
+            ).atStartOfDay();
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Data inválida: " + data);
+        }
+    }
+
+    public void migrar(Connection conexao) throws SQLException, IOException {
+
+        int totalLidas = 0;
+        int inseridas = 0;
+        int rejeitadas = 0;
+
+        String sql = """
+                INSERT INTO pedido_itens
+                (id,pedido_id,produto_id,quantidade,preco_unitario,subtotal,created_at)
+                VALUES (?, ?, ?, ?, ?, ? , ?)
+                """;
+
+        PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        Path caminho = Path.of("base_legada", "pedido_itens.csv");
+        BufferedReader leitor = Files.newBufferedReader(caminho);
+
+        String linha = leitor.readLine();
+
+        while ((linha = leitor.readLine()) != null) {
+
+            totalLidas++;
+
+            String[] campos = linha.split(";", -1);
+
+            if (campos.length != 7) {
+                rejeitadas++;
+                System.out.println("Registro rejeitado!");
+                System.out.println("Motivo: quantidade de campos inválida.");
+                continue;
+            }
+
+            if (campos[1].isEmpty() || campos[2].isEmpty() || campos[3].isEmpty()){
+
+                rejeitadas++;
+                System.out.println("Registro rejeitado!");
+                System.out.println("Motivo: campo obrigatório vazio.");
+                continue;
+            }
+
+            try {
+
+                int id = Integer.parseInt(campos[0]);
+
+                int pedido_id = Integer.parseInt(campos[1]);
+                int produto_id = Integer.parseInt(campos[2]);
+                int quantidade = Integer.parseInt(campos[3]);
+                BigDecimal preco_unitario = new BigDecimal(campos[4].replace(",", "."));
+                BigDecimal subtotal = new BigDecimal(campos[5].replace(",", "."));
+                
+                LocalDateTime dataCriacao =
+                        converterData(campos[6]);
+
+                
+
+
+                stmt.setInt(1, id);
+                stmt.setInt(2, pedido_id);
+                stmt.setInt(3, produto_id);
+                stmt.setInt(4, quantidade);
+                stmt.setBigDecimal(5, preco_unitario);
+                stmt.setBigDecimal(6, subtotal);
+
+                stmt.setObject(7, dataCriacao);
+
+                stmt.executeUpdate();
+
+                inseridas++;
+
+                System.out.println("Registro inserido: ID " + id);
+
+            } catch (SQLException | RuntimeException e) {
+
+                rejeitadas++;
+
+                System.out.println("Registro rejeitado!");
+                System.out.println("Motivo: " + e.getMessage());
+            }
+        }
+
+        System.out.println();
+        System.out.println("===== RESUMO DA MIGRAÇÃO =====");
+        System.out.println("Total lidas: " + totalLidas);
+        System.out.println("Inseridas: " + inseridas);
+        System.out.println("Rejeitadas: " + rejeitadas);
+    }
+
 }
